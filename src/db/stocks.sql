@@ -1,0 +1,1 @@
+create table stocks as select * from "./storage/stocks/**/*.parquet";

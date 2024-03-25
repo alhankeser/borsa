@@ -30,6 +30,7 @@ class TradeStation:
 
     def __init__(self) -> None:
         self.base_url = "https://api.tradestation.com/v3"
+        self.max_bars = 57_600
         self.token_subdir = "tradestation"
         self.client_id = os.getenv("TRADESTATION_API_KEY")
         self.client_secret = os.getenv("TRADESTATION_API_SECRET")
@@ -86,17 +87,22 @@ class TradeStation:
             return Response(401, None)
         return Response(200, json.loads(response.stdout))
 
-    def _symbol_data_endpoint(self, symbol, interval, unit, start_date, end_date):
-        return (
-            f"{self.base_url}/marketdata/barcharts/{symbol}"
-            f"?interval={interval}"
-            f"&unit={unit}"
-            f"&firstdate={start_date}"
-            f"&lastdate={end_date}"
-        )
+    def _get_bars_endpoint(self, symbol, interval=None, unit=None, barsback=None, start_date=None, end_date=None):
+        url = f"{self.base_url}/marketdata/barcharts/{symbol}?sessiontemplate=Default"
+        if interval is not None:
+            url += f"&interval={interval}"
+        if unit is not None:
+            url += f"&unit={unit}"
+        if barsback is not None:
+            url += f"&barsback={barsback}"
+        if start_date is not None:
+            url += f"&firstdate={start_date}"
+        if end_date is not None:
+            url += f"&lastdate={end_date}"
+        return url
 
-    def get_symbol_data(self, token, symbol, interval, unit, start_date, end_date):
-        url = self._symbol_data_endpoint(symbol, interval, unit, start_date, end_date)
+    def get_symbol_data(self, token, args):
+        url = self._get_bars_endpoint(**args)
         headers = {"Authorization": f"Bearer {token}"}
         response = requests.request("GET", url, headers=headers)
         return response

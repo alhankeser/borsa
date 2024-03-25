@@ -43,8 +43,8 @@ class Token:
 
 class Api:
     def __init__(self, config):
-        self.config = config
-        self.token = Token(config.token_subdir)
+        self.config = config()
+        self.token = Token(self.config.token_subdir)
         self.response = self.config.response
 
     def _get_first_access_token(self):
@@ -73,17 +73,17 @@ class Api:
         return self.token.access()
     
     def try_endpoint(self, token, endpoint, args):
-        res = endpoint(token, **args)
+        res = endpoint(token, args)
         if not self._is_response_authorized(res):
             logger.info("Refreshing token...")
             self._refresh_access_token()
             token = self.get_token()
-            res = endpoint(token, **args)
+            res = endpoint(token, args)
         if not self._is_response_authorized(res):
             logger.info("Getting first token...")
             self._get_first_access_token()
             token = self.get_token()
-            res = endpoint(token, **args)
+            res = endpoint(token, args)
         if not self._is_response_authorized(res):
             logger.error("Cannot authorize api.")
             sys.exit(1)
@@ -94,5 +94,5 @@ class Api:
         endpoint = self.config.get_symbol_data
         res = self.try_endpoint(token, endpoint, args)
         data = self.config.parse_symbol_data(res.text)
-        return pd.DataFrame(data)
+        return data
 
