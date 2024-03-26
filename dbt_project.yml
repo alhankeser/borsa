@@ -1,0 +1,30 @@
+name: borsa
+
+profile: borsa
+
+config-version: 2
+
+model-paths: ["dbt/models"]
+seed-paths: ["dbt/seeds"]
+test-paths: ["dbt/tests"]
+analysis-paths: ["dbt/analysis"]
+macro-paths: ["dbt/macros"]
+snapshot-paths: ["dbt/snapshots"]
+docs-paths: ["dbt/docs"]
+asset-paths: ["dbt/assets"]
+
+log-path: "dbt/logs"
+target-path: "dbt/target"
+packages-install-path: "dbt/packages"
+
+clean-targets: ["dbt/target"]
+
+# vars:
+#   peak_time_ranges: [5, 15, 30, 60, 300, 600, 1200, 3600]
+#   training_start_date: "2014-01-01"
+#   lookback_windows: [14, 28, 84]
+
+models:
+  borsa:
+    trade:
+      +materialized: table

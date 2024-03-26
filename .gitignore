@@ -3,6 +3,11 @@
 **__pycache__**
 **.env**
 **.tokens**
+**profiles.yml
+**.user.yml
 storage/*
+dbt/logs/*
+dbt/target/*
+dbt/packages/*
 *.duckdb*
 !.gitkeep

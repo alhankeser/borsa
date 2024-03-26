@@ -63,9 +63,6 @@ class TradeStation:
         )
         driver = webdriver.Firefox()
         driver.get(url)
-        driver.find_element("id", "username").send_keys(os.getenv("TRADESTATION_USERNAME"))
-        driver.find_element("id", "password").send_keys(os.getenv("TRADESTATION_PASSWORD"))
-        driver.find_element("id", "btn-login").click()
         while "?code=" not in driver.current_url:
             time.sleep(0.25)
         auth_code = driver.current_url.split("?code=")[1]

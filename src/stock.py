@@ -2,16 +2,16 @@ import os
 import re
 from datetime import datetime, timedelta
 import pandas as pd
+from database import Database
 from dotenv import load_dotenv
-
 load_dotenv()
 
 
 class Stock:
-    def __init__(self, symbol, api, db) -> None:
+    def __init__(self, symbol, api) -> None:
         self.symbol = symbol
         self.api = api
-        self.db = db
+        self.db = Database()
         self.storage_subdir = "stocks"
         self.storage_path = os.path.join(
             os.getenv("STORAGE_DIR"), self.storage_subdir, self.symbol
@@ -39,6 +39,7 @@ class Stock:
                 + re.sub(r"[:\-]", "_", max_date[:-1])
                 + ".parquet"
             )
+            df["Symbol"] = self.symbol
             df.to_parquet(
                 os.path.join(self.storage_path, filename),
                 index=False,
@@ -51,5 +52,5 @@ class Stock:
     def get_history_before(self, start_date, end_date):
         pass
 
-    def close(self, date):
-        pass
+    def price(self, date=None):
+        return self.db.get_row(self.symbol, 'Close', date)

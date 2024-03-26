@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: local
+    meta:
+      external_location: "./storage/**/*.parquet" 
+    tables:
+      - name: stocks
