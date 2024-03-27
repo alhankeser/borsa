@@ -5,7 +5,6 @@ from strategy import Strategy
 import timeit
 from time import time
 
-
 def main():
 
     api = Api(TradeStation)
@@ -13,21 +12,23 @@ def main():
     price = stock.price()
     print(price)
     
-    strategy = Strategy([
-        {
-            "close:1__cross:above__ewm:40",
-            "ewm:20__comp:>__ewm:40",
-        },
-        {
-            "close:1__comp:>__ewm:5",
-            "ewm:5__comp:>__ewm:10",
-            "ewm:10__comp:>__ewm:20",
-            "ewm:20__move:continuation__dir:up",
-        }
-    ])
+    # strategy = Strategy([
+    #     {
+    #         "close:1__x__ewm:40",
+    #         "ewm:20__>__ewm:40",
+    #     },
+    #     {
+    #         "close:1__>__ewm:5",
+    #         "ewm:5__>__ewm:10",
+    #         "ewm:10__>__ewm:20",
+    #         "ewm:20__patt:con__dir:up",
+    #     }
+    # ])
 
-    print(strategy.trigger_groups[0].triggers[0].indicators[0])
     
+    # # print(strategy.trigger_groups[0].triggers[0].indicators[0])
+    # print(strategy.trigger_groups[0].hello())
+
     # stock.reset_history(start_date="2007-01-01T00:00:00Z", end_date="2024-03-25T20:00:00Z")
 
     # args = {

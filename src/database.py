@@ -9,9 +9,9 @@ class Database:
         self.con = duckdb.connect(os.path.join(os.getenv("DATABASE_DIR"), os.getenv("DEV_DATABASE")))
 
     def query(self, query):
-        pass
+        return self.con.query(query).fetchall()
 
-    def get_row(self, symbol, col, date=None):
+    def get_one(self, symbol, col, date=None):
         if date is None:
             return self.con.query(f"""
                            select {col} from stocks 

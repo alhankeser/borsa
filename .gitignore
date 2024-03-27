@@ -5,6 +5,7 @@
 **.tokens**
 **profiles.yml
 **.user.yml
+.vscode
 storage/*
 dbt/logs/*
 dbt/target/*

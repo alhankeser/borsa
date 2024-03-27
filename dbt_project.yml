@@ -19,10 +19,9 @@ packages-install-path: "dbt/packages"
 
 clean-targets: ["dbt/target"]
 
-# vars:
-#   peak_time_ranges: [5, 15, 30, 60, 300, 600, 1200, 3600]
-#   training_start_date: "2014-01-01"
-#   lookback_windows: [14, 28, 84]
+vars:
+  smas: [0, 5, 10, 20, 40]
+  bars_ago: [1, 2, 3, 4, 5]
 
 models:
   borsa:

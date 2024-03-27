@@ -53,4 +53,4 @@ class Stock:
         pass
 
     def price(self, date=None):
-        return self.db.get_row(self.symbol, 'Close', date)
+        return self.db.get_one(self.symbol, 'Close', date)
