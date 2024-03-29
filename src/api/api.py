@@ -42,7 +42,8 @@ class Token:
 
 
 class Api:
-    def __init__(self, config):
+    def __init__(self, config, env):
+        self.env = env
         self.config = config()
         self.token = Token(self.config.token_subdir)
         self.response = self.config.response

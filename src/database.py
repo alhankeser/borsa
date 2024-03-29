@@ -5,23 +5,25 @@ load_dotenv()
 
 
 class Database:
-    def __init__(self):
-        self.con = duckdb.connect(os.path.join(os.getenv("DATABASE_DIR"), os.getenv("DEV_DATABASE")))
+    def __init__(self, env):
+        self.env = env
+        self.name = os.getenv("PROD_DATABASE") if self.env == "prod" else os.getenv("DEV_DATABASE")
+        self.con = duckdb.connect(os.path.join(os.getenv("DATABASE_DIR"), self.name))
 
     def query(self, query):
-        return self.con.query(query).fetchall()
+        return self.con.query(query)
 
     def get_one(self, symbol, col, date=None):
         if date is None:
             return self.con.query(f"""
-                           select {col} from stocks 
-                           where Symbol = '{symbol}'
-                           order by TimeStamp desc
+                           select {col} from _indicators 
+                           where symbol = '{symbol}'
+                           order by timestamp desc
                            limit 1
-                           """).fetchone()[0]
+                           """)
         else:
             return self.con.query(f"""
-                           select {col} from stocks 
-                           where Symbol = '{symbol}' 
-                           and TimeStamp = '{date}'
-                           """).fetchone()[0]
+                           select {col} from _indicators 
+                           where symbol = '{symbol}' 
+                           and timestamp = '{date}'
+                           """)

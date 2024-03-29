@@ -1,8 +1,15 @@
 version: 2
 
 sources:
-  - name: local
+  - name: dev
     meta:
-      external_location: "./storage/**/*.parquet" 
+      external_location: "./storage/dev/**/*.parquet" 
     tables:
       - name: stocks
+  
+  - name: prod
+    meta:
+      external_location: "./storage/prod/**/*.parquet" 
+    tables:
+      - name: stocks
+      

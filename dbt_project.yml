@@ -25,5 +25,7 @@ vars:
 
 models:
   borsa:
+    indicators:
+      +materialized: "{{ 'table' if target.name == 'dev' else 'view' }}"
     trade:
       +materialized: table
