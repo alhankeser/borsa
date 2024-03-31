@@ -4,7 +4,7 @@ select distinct
     low::double as low,
     open::double as open,
     close::double as close,
-    timestamp::datetime as timestamp,
+    timestamp::datetime as ts,
     totalvolume::int as total_volume,
     downticks::int as down_ticks,
     downvolume::int as down_volume,

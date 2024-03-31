@@ -3,7 +3,7 @@
         round(
             avg(close) over (
                 partition by symbol
-                order by timestamp rows between {{ window }} preceding and current row
+                order by ts rows between {{ window }} preceding and current row
             ),
             2
         )::double as sma{{ window }},

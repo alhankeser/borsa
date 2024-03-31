@@ -3,6 +3,7 @@ import re
 from datetime import datetime, timedelta
 import pandas as pd
 from database import Database
+from utils import get_minute, get_day, as_datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -13,7 +14,6 @@ class Stock:
         self.api = api
         self.env = api.env
         self.db = Database(self.env)
-        self.today = datetime.now().strftime("%Y-%m-%dT00:00:00Z")
         self.storage_subdir = "stocks"
         self.storage_path = os.path.join(
             os.getenv("STORAGE_DIR"), self.env, self.storage_subdir, self.symbol
@@ -21,14 +21,11 @@ class Stock:
         if not os.path.exists(self.storage_path):
             os.makedirs(self.storage_path)
 
-    def _this_minute(self):
-        return datetime.now().strftime("%Y-%m-%dT%H:%M:00Z")
-
     def _save_to_db(self, data, filename=None):
         df = pd.DataFrame(data)
-        min_date = df.head(1)["TimeStamp"].values[0]
-        max_date = df.tail(1)["TimeStamp"].values[0]
         if not filename:
+            min_date = df.head(1)["TimeStamp"].values[0]
+            max_date = df.tail(1)["TimeStamp"].values[0]
             filename = (
                 re.sub(r"[:\-]", "_", min_date[:-1])
                 + "__"
@@ -57,7 +54,7 @@ class Stock:
 
     def get_latest(self, start_date=None, end_date=None):
         if not start_date:
-            start_date = self.today
+            start_date = get_day
         
         args = {
             "symbol": self.symbol,
@@ -66,7 +63,8 @@ class Stock:
             "start_date": start_date,
         }
         if end_date:
-            args["end_date"] = end_date
+            # Make end_date inclusive of this end_date minute
+            args["end_date"] = (as_datetime(end_date) + timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M:00Z")
         data = self.api.get_symbol_data(args)
         self._save_to_db(data, "latest.parquet")
 

@@ -1,6 +1,6 @@
 with
     smas as (
-        select symbol, timestamp, close as price, {{ get_smas() }}
+        select symbol, ts, close as price, {{ get_smas() }}
         from {{ ref("src__price_history") }}
     ),
 
