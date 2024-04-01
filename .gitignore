@@ -8,8 +8,8 @@
 **.user.yml
 .vscode
 storage/*
-dbt/logs/*
-dbt/target/*
-dbt/packages/*
+**/target
+**/packages
+**/logs
 *.duckdb*
 !.gitkeep

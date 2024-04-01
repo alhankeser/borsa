@@ -5,11 +5,11 @@ sources:
     meta:
       external_location: "./storage/dev/**/*.parquet" 
     tables:
-      - name: stocks
+      - name: stock_price
   
   - name: prod
     meta:
       external_location: "./storage/prod/**/*.parquet" 
     tables:
-      - name: stocks
+      - name: stock_price
       

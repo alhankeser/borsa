@@ -20,9 +20,9 @@ select distinct
     barstatus as bar_status,
 
 {% if target.name == 'prod' %}
-from {{ source("prod", "stocks") }}
+    from {{ source("prod", "stock_price") }}
 {% endif %}
 
 {% if target.name == 'dev' %}
-from {{ source("dev", "stocks") }}
+    from {{ source("dev", "stock_price") }}
 {% endif %}
