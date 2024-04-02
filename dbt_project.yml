@@ -31,6 +31,10 @@ vars:
     {
       id: "test2",
       buy: "(sma0 > sma5 and sma5 > sma10)",
+    },
+    {
+      id: "test3",
+      buy: "(sma0 > sma5 and sma5 > sma10 and sma10 > sma20 and sma20cntup1)",
     }
   ]
 

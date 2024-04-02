@@ -4,8 +4,8 @@
             select
                 symbol,
                 ts,
-                '{{ strategy[' id '] }}' as strategy_id,
-                {{ strategy['buy'] }} as buy,
+                '{{ strategy["id"] }}' as strategy_id,
+                {{ strategy["buy"] }} as buy,
             from {{ model }}
             {% if not loop.last %}
                 union all

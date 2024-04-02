@@ -3,7 +3,7 @@ select distinct
     high::double as high,
     low::double as low,
     open::double as open,
-    close::double as close,
+    close::double as price,
     timestamp::datetime as ts,
     totalvolume::int as total_volume,
     downticks::int as down_ticks,

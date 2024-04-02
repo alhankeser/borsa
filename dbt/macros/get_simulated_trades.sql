@@ -3,7 +3,7 @@
             output_cte_name="trades",
             iteration=0,
             max_iterations=var("max_buys_per_day"),
-            cols="symbol, ts, ts_day, market_open_ts, market_close_ts, price, max_qty, strategy_id, buy",
+            cols="symbol, ts, epoch, ts_day, market_open_ts, market_close_ts, price, max_qty, strategy_id, buy",
             partition_cols="strategy_id, symbol, ts_day")
         %}
 
@@ -69,17 +69,26 @@
             last_buy_value,
             open_profit,
             open_profit_perc,
-            case when {{ var("sell_conditions") }} then price end as sell_price,
             case
-                when {{ var("sell_conditions") }} then last_buy_qty
+                when {{ var("sell_conditions") }} and last_buy_qty > 0
+                then price
+            end as sell_price,
+            case
+                when {{ var("sell_conditions") }} and last_buy_qty > 0
+                then last_buy_qty
             end as sell_qty,
             case
-                when {{ var("sell_conditions") }} then (sell_price * sell_qty)
+                when {{ var("sell_conditions") }} and last_buy_qty > 0
+                then (sell_price * sell_qty)
             end as sell_value,
             case
-                when {{ var("sell_conditions") }} then open_profit
+                when {{ var("sell_conditions") }} and last_buy_qty > 0
+                then open_profit
             end as sell_profit,
-            case when {{ var("sell_conditions") }} then ts end as sell_ts,
+            case
+                when {{ var("sell_conditions") }} and last_buy_qty > 0 
+                then ts
+            end as sell_ts,
         from simulate_hold_{{ iteration }}
     ),
 

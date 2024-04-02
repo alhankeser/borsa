@@ -22,6 +22,7 @@ with
             symbol,
             strategy_id,
             ts,
+            epoch,
             ts_day,
             last_buy_ts as buy_ts,
             last_buy_price as buy_price,
