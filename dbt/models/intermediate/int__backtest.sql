@@ -28,6 +28,7 @@ with
             last_buy_price as buy_price,
             last_buy_qty as buy_qty,
             last_buy_value as buy_value,
+            max_price,
             sell_ts,
             sell_price,
             sell_qty,

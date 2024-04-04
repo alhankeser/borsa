@@ -53,7 +53,37 @@
             (price * last_buy_qty) - last_buy_value as open_profit,
             ((price * last_buy_qty) - last_buy_value)
             / last_buy_value as open_profit_perc,
+            case
+                when
+                    last_value(buy_ts ignore nulls) over (
+                        partition by {{ partition_cols }} order by ts
+                    )
+                    is not null
+                then price
+            end as hold_price,
         from simulate_buy_{{ iteration }}
+    ),
+
+    simulate_trailstop_{{ iteration }} as (
+        select
+            {{ cols }},
+            buy_ts,
+            buy_price,
+            buy_qty,
+            buy_value,
+            last_buy_ts,
+            last_buy_price,
+            last_buy_qty,
+            last_buy_value,
+            open_profit,
+            open_profit_perc,
+            hold_price,
+            max(hold_price) over (
+                partition by {{ partition_cols }}
+                order by ts
+                rows between unbounded preceding and current row
+            ) as max_price,
+        from simulate_hold_{{ iteration }}
     ),
 
     simulate_sell_{{ iteration }} as (
@@ -69,27 +99,28 @@
             last_buy_value,
             open_profit,
             open_profit_perc,
+            hold_price,
+            max_price,
+            hold_price / max_price - 1 as trail_perc,
             case
-                when {{ var("sell_conditions") }} and last_buy_qty > 0
-                then price
-            end as sell_price,
+                when
+                    (
+                        {{ var("sell_conditions") }}
+                        or trail_perc < {{ var("trailstop") }}
+                        or open_profit_perc > {{ var("target_profit") }}
+                    )
+                    and last_buy_qty > 0
+                then true
+                else false
+            end as sell_decision,
+            case when sell_decision then price end as sell_price,
+            case when sell_decision then last_buy_qty end as sell_qty,
             case
-                when {{ var("sell_conditions") }} and last_buy_qty > 0
-                then last_buy_qty
-            end as sell_qty,
-            case
-                when {{ var("sell_conditions") }} and last_buy_qty > 0
-                then (sell_price * sell_qty)
+                when sell_decision then (sell_price * sell_qty)
             end as sell_value,
-            case
-                when {{ var("sell_conditions") }} and last_buy_qty > 0
-                then open_profit
-            end as sell_profit,
-            case
-                when {{ var("sell_conditions") }} and last_buy_qty > 0 
-                then ts
-            end as sell_ts,
-        from simulate_hold_{{ iteration }}
+            case when sell_decision then open_profit end as sell_profit,
+            case when sell_decision then ts end as sell_ts,
+        from simulate_trailstop_{{ iteration }}
     ),
 
     {{ output_cte_name }}_{{ iteration }} as (
@@ -105,6 +136,8 @@
             last_buy_value,
             open_profit,
             open_profit_perc,
+            hold_price,
+            max_price,
             sell_price,
             sell_qty,
             sell_value,
