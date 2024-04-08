@@ -1,20 +1,41 @@
+import time
+import subprocess
 from api import Api
 from api.tradestation import TradeStation
 from stock import Stock
 from database import Database
-from utils import get_minute, get_day, as_datetime
-import time
+from backtest import Backtest
+from visualize import Visualize
+from utils import get_minute, get_day, as_datetime, upload_to_cloud
 
 
 ENV = "dev"
 
 def main():
-
+    
+    # subprocess.call(["dbt", "run", "--target", ENV])
     db = Database(ENV)
-    api = Api(TradeStation, ENV)
-    stock = Stock("QQQ", api)
 
-    # db.query("select * from _trades").to_csv("trades.csv")
+    b = Backtest(db)
+
+    b.run()
+
+    # viz = Visualize(db)
+
+    # plot = viz.day('2006-08-29')
+    # viz.profit(['2001-01-01', '2024-04-01'])
+
+    # plot.show()
+
+    # api = Api(TradeStation, ENV)
+    # stock = Stock("QQQ", api, db)
+
+    # table = "rpt__backtest"
+    # filepath = db.export(table)
+
+    # upload_to_cloud(filepath, table)
+
+    print(db.query("select * from rpt__backtest_by_day"))
 
     # # Simulate or trade on a single day
     # last_minute = None

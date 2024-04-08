@@ -20,19 +20,20 @@ clean-targets: ["dbt/target"]
 vars:
   smas: [0, 5, 10, 20, 40]
   bars_ago: [1, 2, 3, 4, 5]
-  max_buy_value: 10000
+  max_buy_value: 10_000
   max_buys_per_day: 3
   trailstop: -0.005
-  target_profit: 0.025
+  target_profit: 0.05
+  sell_by_minutes: 120
   sell_conditions: "open_profit_perc < -0.005 or ts = market_close_ts"
   strategies: [
     {
       id: "test1",
-      buy: "(sma0 > sma5)",
+      buy: "(sma0 > sma5 and sma0cntup2)",
     },
     {
       id: "test2",
-      buy: "(sma0 > sma5 and sma5 > sma10)",
+      buy: "(sma0 > sma5 and sma5 > sma10 and sma5cntup1)",
     },
     {
       id: "test3",

@@ -12,4 +12,5 @@ storage/*
 **/packages
 **/logs
 *.duckdb*
+package-lock.yml
 !.gitkeep

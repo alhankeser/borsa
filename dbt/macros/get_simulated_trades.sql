@@ -3,7 +3,7 @@
             output_cte_name="trades",
             iteration=0,
             max_iterations=var("max_buys_per_day"),
-            cols="symbol, ts, epoch, ts_day, market_open_ts, market_close_ts, price, max_qty, strategy_id, buy",
+            cols="symbol, ts, epoch, ts_day, minutes_since_open, market_open_ts, market_close_ts, price, max_qty, strategy_id, buy",
             partition_cols="strategy_id, symbol, ts_day")
         %}
 
@@ -108,6 +108,7 @@
                         {{ var("sell_conditions") }}
                         or trail_perc < {{ var("trailstop") }}
                         or open_profit_perc > {{ var("target_profit") }}
+                        or minutes_since_open >= {{ var("sell_by_minutes") }}
                     )
                     and last_buy_qty > 0
                 then true

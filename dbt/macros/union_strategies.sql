@@ -4,8 +4,9 @@
             select
                 symbol,
                 ts,
+                minutes_since_open,
                 '{{ strategy["id"] }}' as strategy_id,
-                {{ strategy["buy"] }} as buy,
+                minutes_since_open < ({{ var("sell_by_minutes") }}-15) and {{ strategy["buy"] }} as buy,
             from {{ model }}
             {% if not loop.last %}
                 union all

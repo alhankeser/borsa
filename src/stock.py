@@ -9,11 +9,11 @@ load_dotenv()
 
 
 class Stock:
-    def __init__(self, symbol, api) -> None:
+    def __init__(self, symbol, api, db) -> None:
         self.symbol = symbol
         self.api = api
         self.env = api.env
-        self.db = Database(self.env)
+        self.db = db
         self.storage_subdir = "stocks"
         self.storage_path = os.path.join(
             os.getenv("STORAGE_DIR"), self.env, self.storage_subdir, self.symbol
