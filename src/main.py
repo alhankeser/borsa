@@ -5,6 +5,7 @@ from api.tradestation import TradeStation
 from stock import Stock
 from database import Database
 from backtest import Backtest
+from analyze import Analyze
 from visualize import Visualize
 from utils import get_minute, get_day, as_datetime, upload_to_cloud
 
@@ -16,14 +17,21 @@ def main():
     # subprocess.call(["dbt", "run", "--target", ENV])
     db = Database(ENV)
 
-    b = Backtest(db)
+    # print(db.query("select ts_day from rpt__backtest_by_day order by profit limit 1"))
 
-    b.run()
+    # b = Backtest(db)
+    # b.run()
 
-    # viz = Visualize(db)
+    # a = Analyze(db)
+    # best_days = a.get_best_days(3).df()
+    # worst_days = a.get_worst_days(3).df()
 
-    # plot = viz.day('2006-08-29')
-    # viz.profit(['2001-01-01', '2024-04-01'])
+    # print(worst_days)
+
+    viz = Visualize(db)
+    viz.profit(['2001-01-01', '2024-04-01'], symbol="QQQ")
+    # viz.profit_by_day(['2001-01-01', '2024-04-01'])
+    # viz.days(['2024-03-21', '2024-03-22'], strategy_id='test2', symbol="QQQ")
 
     # plot.show()
 
@@ -35,7 +43,7 @@ def main():
 
     # upload_to_cloud(filepath, table)
 
-    print(db.query("select * from rpt__backtest_by_day"))
+    # print(db.query("select * from rpt__backtest_by_day"))
 
     # # Simulate or trade on a single day
     # last_minute = None

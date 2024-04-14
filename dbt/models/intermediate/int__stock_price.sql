@@ -1,14 +1,18 @@
 with
 
     final as (
-        select
-            symbol,
-            ts,
-            epoch,
-            date_trunc('day', ts) as ts_day,
-            price, 
-            floor({{ var("max_buy_value") }} / price) as max_qty,
-        from {{ ref("src__stock_price") }}
+        select distinct
+            s.symbol,
+            s.ts,
+            s.epoch,
+            date_trunc('day', s.ts) as ts_day,
+            s.price,
+            floor({{ var("max_buy_value") }} / s.price) as max_qty,
+            datediff('minute', m.market_open_ts, s.ts) as minutes_since_open, 
+        from {{ ref("src__stock_price") }} s
+        left join {{ ref("temp__market_hours") }} as m
+            on m.ts_day = date_trunc('day', s.ts)
+            and m.symbol = s.symbol
     )
 
 select *

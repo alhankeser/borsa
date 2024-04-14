@@ -23,8 +23,8 @@ class Stock:
 
     def _save_to_db(self, data, filename=None):
         df = pd.DataFrame(data)
+        min_date = df.head(1)["TimeStamp"].values[0]
         if not filename:
-            min_date = df.head(1)["TimeStamp"].values[0]
             max_date = df.tail(1)["TimeStamp"].values[0]
             filename = (
                 re.sub(r"[:\-]", "_", min_date[:-1])
@@ -38,6 +38,7 @@ class Stock:
             index=False,
             compression="snappy",
         )
+        return min_date
 
     def reset_history(self, start_date, end_date):
         min_date = end_date
@@ -50,7 +51,7 @@ class Stock:
                 "end_date": min_date,
             }
             data = self.api.get_symbol_data(args)
-            self._save_to_db(data)
+            min_date = self._save_to_db(data)
 
     def get_latest(self, start_date=None, end_date=None):
         if not start_date:

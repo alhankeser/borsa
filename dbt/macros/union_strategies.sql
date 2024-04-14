@@ -4,7 +4,6 @@
             select
                 symbol,
                 ts,
-                minutes_since_open,
                 '{{ strategy["id"] }}' as strategy_id,
                 minutes_since_open < ({{ var("sell_by_minutes") }}-15) and {{ strategy["buy"] }} as buy,
             from {{ model }}

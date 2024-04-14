@@ -18,7 +18,9 @@
                     )
             end as buy_rank
         from {{ model }}
-        {% if iteration > 0 %} where ts > first_sell_ts {% endif %}
+        where minutes_since_open <= {{ var("sell_by_minutes") }}
+        and minutes_since_open >= {{ var("buy_after_minutes") }}
+        {% if iteration > 0 %} and ts > first_sell_ts {% endif %}
     ),
 
     simulate_buy_{{ iteration }} as (

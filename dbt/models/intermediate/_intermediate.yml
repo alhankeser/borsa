@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: int__backtest
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - ts
+            - strategy_id
+  - name: int__indicators
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - ts
+  - name: int__optimal_strategy
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - ts_day
+  - name: int__stock_price
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - ts
+  - name: int__strategies
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - symbol
+            - ts
+            - strategy_id

@@ -26,3 +26,5 @@ select distinct
 {% if target.name == 'dev' %}
     from {{ source("dev", "stock_price") }}
 {% endif %}
+
+    where price > 0

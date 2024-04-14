@@ -21,24 +21,27 @@ vars:
   smas: [0, 5, 10, 20, 40]
   bars_ago: [1, 2, 3, 4, 5]
   max_buy_value: 10_000
-  max_buys_per_day: 3
+  max_buys_per_day: 1
   trailstop: -0.005
-  target_profit: 0.05
+  target_profit: 1
+  buy_after_minutes: 5
   sell_by_minutes: 120
-  sell_conditions: "open_profit_perc < -0.005 or ts = market_close_ts"
+  sell_conditions: "false"
+  include_optimal_strategy: "true"
   strategies: [
-    {
-      id: "test1",
-      buy: "(sma0 > sma5 and sma0cntup2)",
-    },
+    # {
+    #   id: "test1",
+    #   buy: "sma0lag2 < sma10lag2 and sma0 > sma10 and sma5cntup2 and sma0 > sma5",
+    # },
     {
       id: "test2",
-      buy: "(sma0 > sma5 and sma5 > sma10 and sma5cntup1)",
+      buy: "(sma0lag2 < sma10lag2 and sma0 > sma10 and sma5cntup2 and sma0 > sma5) 
+            or (sma0cntup2 and price > sma5 and sma5 > sma10 and sma10 > sma20)",
     },
-    {
-      id: "test3",
-      buy: "(sma0 > sma5 and sma5 > sma10 and sma10 > sma20 and sma20cntup1)",
-    }
+    # {
+    #   id: "test3",
+    #   buy: "sma5cntup3",
+    # }
   ]
 
 # Dev is for backtesting where tables are faster

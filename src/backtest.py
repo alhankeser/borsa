@@ -7,9 +7,8 @@ class Backtest:
         self.db = db
 
     def run(self):
-        # @TODO: pass strategies to this and set as var
         self.db.close()
-        subprocess.call(["dbt", "run", "--target", "dev"])
+        subprocess.call(["dbt", "run", "-m", "int__strategies+", "--target", "dev"])
         self.db.restart()
 
     
