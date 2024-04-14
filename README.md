@@ -1,6 +1,8 @@
 ## Trading Bot
 A personal day-trading bot that relies on dbt and DuckDB for data transformations.
 
+[Learn more](https://alhan.co/g/trading-bot-dbt-duckdb)
+
 ### Why
 
 I'm publicly rewriting my day trading bot because: 
