@@ -37,6 +37,7 @@ with
         from indicators as i
         left join strategies as s
             on i.ts = s.ts
+            and i.symbol = s.symbol
         left join backtest_results as buys
             on buys.buy_ts = i.ts
             and buys.symbol = i.symbol

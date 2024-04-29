@@ -45,7 +45,7 @@ class Visualize:
             ax.set_title(f"{symbol} {ts_day}")
         plt.show()
 
-    def profit(self, ts_days, symbol):
+    def profit(self, ts_days, symbol, strategies=[]):
         df = self.db.query(
             f"""--sql
             with profit_by_day_by_symbol as (

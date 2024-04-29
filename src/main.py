@@ -29,10 +29,10 @@ def main():
     # print(worst_days)
 
     viz = Visualize(db)
-    viz.profit(['2001-01-01', '2024-04-01'], symbol="QQQ")
+    viz.profit(['2000-01-01', '2024-04-01'], symbol="QQQ")
     # viz.profit_by_day(['2001-01-01', '2024-04-01'])
-    # viz.days(['2024-03-21', '2024-03-22'], strategy_id='test2', symbol="QQQ")
-
+    # viz.days(['2024-03-21', '2024-03-22'], strategy_id='optimal', symbol="QQQ")
+    # 2009-07-01
     # plot.show()
 
     # api = Api(TradeStation, ENV)

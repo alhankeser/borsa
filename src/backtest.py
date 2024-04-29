@@ -6,9 +6,10 @@ class Backtest:
     def __init__(self, db) -> None:
         self.db = db
 
-    def run(self):
+    def run(self, refresh=False):
         self.db.close()
-        subprocess.call(["dbt", "run", "-m", "int__strategies+", "--target", "dev"])
+        if refresh:
+            subprocess.call(["dbt", "run", "-m", "int__strategies+"])
+        else:
+            subprocess.call(["dbt", "run"])
         self.db.restart()
-
-    
