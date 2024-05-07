@@ -36,7 +36,6 @@ with
         left join
             optimal_strategy as optimal_buy_window
             on i.symbol = optimal_buy_window.symbol
-            and i.ts_day = optimal_buy_window.ts_day
             and i.ts between optimal_buy_window.best_buy_ts and date_add(
                 optimal_buy_window.best_buy_ts, interval 10 minute
             )

@@ -29,19 +29,15 @@ vars:
   sell_conditions: "false"
   include_optimal_strategy: "true"
   strategies: [
-    # {
-    #   id: "test1",
-    #   buy: "sma0lag2 < sma10lag2 and sma0 > sma10 and sma5cntup2 and sma0 > sma5",
-    # },
+    {
+      id: "buy_at_15min",
+      buy: "minutes_since_open = 15",
+    },
     {
       id: "test2",
       buy: "(sma0lag2 < sma10lag2 and sma0 > sma10 and sma5cntup2 and sma0 > sma5) 
             or (sma0cntup2 and price > sma5 and sma5 > sma10 and sma10 > sma20)",
     },
-    # {
-    #   id: "test3",
-    #   buy: "sma5cntup3",
-    # }
   ]
 
 # Dev is for backtesting where tables are faster

@@ -12,7 +12,6 @@ with
         left join
             {{ ref("int__optimal_strategy") }} optimal_strategy
             on stock_price.symbol = optimal_strategy.symbol
-            and stock_price.ts_day = optimal_strategy.ts_day
             and stock_price.ts = optimal_strategy.best_buy_ts
     ),
 

@@ -7,6 +7,9 @@ with
             s.epoch,
             date_trunc('day', s.ts) as ts_day,
             s.price,
+            s.up_volume,
+            s.down_volume,
+            s.total_volume,
             floor({{ var("max_buy_value") }} / s.price) as max_qty,
             datediff('minute', m.market_open_ts, s.ts) as minutes_since_open, 
         from {{ ref("src__stock_price") }} s
