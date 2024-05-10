@@ -14,7 +14,9 @@ with
 
     reversal as (select *, {{ get_reversal() }} from continuation_lagged),
 
-    final as (select * from reversal)
+    crosses as (select *, {{ get_crosses() }} from reversal),
+
+    final as (select * from crosses)
 
 select *
 from final
