@@ -1,25 +1,68 @@
 import time
 import subprocess
 from api import Api
-from api.tradestation import TradeStation
+from api.schwab import Schwab
 from stock import Stock
 from database import Database
 from backtest import Backtest
 from analyze import Analyze
 from visualize import Visualize
-from utils import get_minute, get_day, as_datetime, upload_to_cloud
+# from utils import get_minute, get_day, as_datetime, upload_to_cloud
+import utils
+import requests
+import urllib
+import os
 
+os.environ['TZ'] = 'UTC'
 
 ENV = "dev"
+START_DATE = "2020-01-01"
+END_DATE = utils.get_tomorrow_date_as_str()
+WATCHLIST = ["AAPL", "NVDA", "SPY", "GOOGL", "SHOP", "TTD"]
+WEEKLY_INVESTMENT = 1000
 
 def main():
-    
-    # subprocess.call(["dbt", "run", "--target", ENV])
-    db = Database(ENV)
 
+    ##############
+    ### SETUP ####
+    ##############
+
+    db = Database(ENV)
+    db.health_check()
+
+    api = Api(Schwab, ENV)
+    api.health_check()
+
+    if ENV == "prod":
+        utils.wait_until_market_is_open(api)
+
+    ##############
+    ### BUILD ####
+    ##############
+
+    # stocks = [Stock(symbol, api, db) for symbol in WATCHLIST]
+    # for stock in stocks:
+    #     stock.get_history(start_date=START_DATE, end_date=END_DATE)
+    
+    db.build()
+
+    ##############
+    #### BUY #####
+    ##############
+
+
+
+    ##############
+    ### REPORT ###
+    ##############
+    
+
+    # subprocess.call(["dbt", "build", "--target", ENV])
+    # stock = Stock("NVDA", api, db)
+    # stock.reset_history(start_date=START_DATE, end_date=END_DATE)
     # print(db.query("select ts_day from rpt__backtest_by_day order by profit limit 1"))
 
-    # b = Backtest(db)
+# b = Backtest(db)  
     # b.run()
 
     # a = Analyze(db)
@@ -28,15 +71,14 @@ def main():
 
     # print(worst_days)
 
-    viz = Visualize(db)
-    viz.profit(['2000-01-01', '2024-04-01'], symbol="QQQ")
+    # viz = Visualize(db)
+    # viz.profit(['2000-01-01', '2024-04-01'], symbol="QQQ")
     # viz.profit_by_day(['2001-01-01', '2024-04-01'])
     # viz.days(['2024-03-21', '2024-03-22'], strategy_id='optimal', symbol="QQQ")
     # 2009-07-01
     # plot.show()
 
-    # api = Api(TradeStation, ENV)
-    # stock = Stock("QQQ", api, db)
+    
 
     # table = "rpt__backtest"
     # filepath = db.export(table)

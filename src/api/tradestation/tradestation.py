@@ -49,7 +49,7 @@ class TradeStation:
             '--data', f'grant_type={grant_type}',
             '--data', f'client_id={self.client_id}',
             '--data', f'client_secret={self.client_secret}',
-            '--data', f'redirect_uri={os.getenv('TRADESTATION_REDIRECT_URL')}'
+            '--data', f'redirect_uri={self.redirect_url}',
         ]
         return command
 
@@ -61,6 +61,7 @@ class TradeStation:
             f"&redirect_uri={self.redirect_url}"
             f"{self.auth_code_extra_params}"
         )
+        print(url)
         driver = webdriver.Firefox()
         driver.get(url)
         while "?code=" not in driver.current_url:
@@ -100,7 +101,7 @@ class TradeStation:
 
     def get_symbol_data(self, token, args):
         url = self._get_bars_endpoint(**args)
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = {"Authorization": f"Bearer {token}", "accept": "application/json"}
         response = requests.request("GET", url, headers=headers)
         return response
     

@@ -35,7 +35,7 @@ vars:
     },
     {
       id: "random2",
-      buy: "minutes_since_open = 15",
+      buy: "sma5 < sma40",
     },
   ]
 
@@ -44,6 +44,6 @@ vars:
 models:
   borsa:
     intermediate:
-      +materialized: "{{ 'table' if target.name == 'dev' else 'view' }}"
+      +materialized: table
     reports:
-      +materialized: "{{ 'table' if target.name == 'dev' else 'view' }}"
+      +materialized: table

@@ -2,7 +2,7 @@
     {% for window in smas %}
         round(
             avg(price) over (
-                partition by symbol, ts_day
+                partition by symbol
                 order by ts rows between {{ window }} preceding and current row
             ),
             2

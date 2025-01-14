@@ -3,8 +3,8 @@
             output_cte_name="trades",
             iteration=0,
             max_iterations=var("max_buys_per_day"),
-            cols="symbol, ts, epoch, ts_day, minutes_since_open, market_open_ts, market_close_ts, price, max_qty, strategy_id, buy",
-            partition_cols="strategy_id, symbol, ts_day")
+            cols="symbol, ts, epoch, price, strategy_id, buy",
+            partition_cols="strategy_id, symbol")
         %}
 
     potential_buys_{{ iteration }} as (
@@ -18,9 +18,7 @@
                     )
             end as buy_rank
         from {{ model }}
-        where minutes_since_open <= {{ var("sell_by_minutes") }}
-        and minutes_since_open >= {{ var("buy_after_minutes") }}
-        {% if iteration > 0 %} and ts > first_sell_ts {% endif %}
+        {% if iteration > 0 %} where ts > first_sell_ts {% endif %}
     ),
 
     simulate_buy_{{ iteration }} as (
@@ -28,8 +26,8 @@
             {{ cols }},
             case when buy_rank = 1 then ts end as buy_ts,
             case when buy_rank = 1 then price end as buy_price,
-            case when buy_rank = 1 then max_qty end as buy_qty,
-            case when buy_rank = 1 then (max_qty * price) end as buy_value,
+            case when buy_rank = 1 then 1 end as buy_qty,
+            case when buy_rank = 1 then (1 * price) end as buy_value,
         from potential_buys_{{ iteration }}
     ),
 
@@ -110,7 +108,6 @@
                         {{ var("sell_conditions") }}
                         or trail_perc < {{ var("trailstop") }}
                         or open_profit_perc > {{ var("target_profit") }}
-                        or minutes_since_open >= {{ var("sell_by_minutes") }}
                     )
                     and last_buy_qty > 0
                 then true

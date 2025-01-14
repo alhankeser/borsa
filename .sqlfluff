@@ -1,0 +1,6 @@
+[sqlfluff]
+templater = dbt
+dialect = duckdb
+
+[sqlfluff:templater:dbt]
+profile = borsa

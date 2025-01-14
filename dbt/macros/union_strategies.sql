@@ -5,7 +5,7 @@
                 symbol,
                 ts,
                 '{{ strategy["id"] }}' as strategy_id,
-                minutes_since_open < ({{ var("sell_by_minutes") }}-15) and {{ strategy["buy"] }} as buy,
+                {{ strategy["buy"] }} as buy,
             from {{ model }}
             {% if not loop.last %}
                 union all
