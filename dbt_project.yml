@@ -22,10 +22,8 @@ vars:
   bars_ago: [1, 2, 3, 4, 5]
   max_buy_value: 10_000
   max_buys_per_day: 1
-  trailstop: -0.005
+  trailstop: -0.05
   target_profit: 1
-  buy_after_minutes: 5
-  sell_by_minutes: 120
   sell_conditions: "false"
   include_optimal_strategy: "true"
   strategies: [
